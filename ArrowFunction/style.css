@@ -1,0 +1,24 @@
+body {
+  display: flex;
+  justify-content: center;
+}
+
+.box {
+  margin-top: 200px;
+  height: 100px;
+  width: 100px;
+  border: solid 1px black;
+  margin: 50px auto;
+  transition: 0.3s width, 0.3s height 0.3s, 0.3s margin-top 0.3s,
+    0.1s background-color;
+}
+
+.size {
+  height: 200px;
+  width: 200px;
+  margin-top: 25px;
+}
+
+.color {
+  background-color: black;
+}
