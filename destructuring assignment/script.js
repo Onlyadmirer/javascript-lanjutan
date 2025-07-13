@@ -1,4 +1,4 @@
-// destruction pada array
+// destructuring pada array
 // function coba() {
 //   return [1,2,5,3,4,8,7]
 // }
@@ -15,7 +15,7 @@
 
 
 
-// destruction pada object
+// destructuring pada object
 // function coba() {
 //   return obj = {
 //     umur: 20,
