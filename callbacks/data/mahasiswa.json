@@ -1,0 +1,17 @@
+[
+  {
+    "nama": "akmal",
+    "umur": 20,
+    "prodi": "sistem informasi"
+  },
+  {
+    "nama": "ucu",
+    "umur": 20,
+    "prodi": "teknik kelautan"
+  },
+  {
+    "nama": "yaya",
+    "umur": 20,
+    "prodi": "teknik perkapalan"
+  }
+]
