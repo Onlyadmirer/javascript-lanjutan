@@ -36,7 +36,7 @@ form.addEventListener('submit', function(e) {
               </div>
       
               <div class="flex flex-wrap justify-center pt-5">
-                <div class="flex justify-center w-full md:w-1/3 h-80">
+                <div class="flex justify-center w-full md:w-1/3 scale-80">
                   <img src="${m.Poster}" alt="" class="">
                 </div>
                 <div class="px-2 py-3 text-sm md:text-lg md:w-2/3">
@@ -63,31 +63,15 @@ form.addEventListener('submit', function(e) {
               detail.classList.add('opacity-100', 'scale-80');
               }, 200);
   
-            // $('.close-btn, .x-close').on('click', function() {
-            //   detail.classList.remove('opacity-100', 'scale-80');
-            //   setTimeout(() => {
-            //       modal.classList.remove('scale-100');
-            //       // Optional: Kosongkan modal setelah ditutup agar tidak menumpuk
-            //       $('.example-modal').html(''); 
-            //   }, 300);
-            // });
-  
-            const close = document.querySelector('.close-btn');
-            const xClose = document.querySelector('.x-close');
-        
-        
-            close.addEventListener('click', function() {
-              detail.classList.remove('opacity-100', 'scale-80')
+            $('.close-btn, .x-close').on('click', function() {
+              detail.classList.remove('opacity-100', 'scale-80');
               setTimeout(() => {
-                modal.classList.remove('scale-100');
-              }, 200);
-            })
-            xClose.addEventListener('click', function() {
-              detail.classList.remove('opacity-100', 'scale-80')
-              setTimeout(() => {
-                modal.classList.remove('scale-100');
-              }, 200);
+                  modal.classList.remove('scale-100');
+                  // Optional: Kosongkan modal setelah ditutup agar tidak menumpuk
+                  $('.example-modal').html(''); 
+              }, 300);
             });
+
           },
             error: error => {
             console.log(error.responseText);
