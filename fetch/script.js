@@ -59,6 +59,7 @@
 const form = document.getElementById('formSearch');
 form.addEventListener('submit', function(e) {
   e.preventDefault();
+  showLoader();
   const inputKeywords = document.querySelector('#search');
   fetch('http://www.omdbapi.com/?apikey=938a560a&s=' + inputKeywords.value)
     .then(response => response.json())
@@ -69,44 +70,46 @@ form.addEventListener('submit', function(e) {
       movies.forEach(m => cards += showCards(m));
       const cardContainer = document.querySelector('.card-container');
       cardContainer.innerHTML = cards;
+    }).catch(error => {console.log(error)})
+    .finally(() => {hideLoader()});
+  });
 
-      const modalButton = document.querySelectorAll('.modal-button');
-      modalButton.forEach(button => {
-        button.addEventListener('click', function() {
-          fetch('http://www.omdbapi.com/?apikey=938a560a&i=' + this.dataset.imdbid)
-            .then(response => response.json())
-            .then(response => {
-              const modal = document.querySelector('.example-modal');
-              modal.innerHTML = detailCards(response);
-              
-              const detail = document.querySelector('.modal-container');
-        
-              setTimeout(() => {
-              modal.classList.add('scale-100');
-              detail.classList.add('opacity-100', 'scale-80');
-              }, 200);
-        
-              const closeBtn = document.querySelector('.close-btn');
-              closeBtn.addEventListener('click', function() {
-                detail.classList.remove('opacity-100', 'scale-80');
-                setTimeout(() => {
-                  modal.classList.remove('scale-100');
-                  }, 300);
-              })
-              const close = document.querySelector('.x-close');
-              close.addEventListener('click', function() {
-                detail.classList.remove('opacity-100', 'scale-80');
-                setTimeout(() => {
-                  modal.classList.remove('scale-100');
-                  }, 300);
-              })
-            })
 
-        });
-      });
 
+  const modalButton = document.querySelector('.card-container');
+  modalButton.addEventListener('click', e => {
+    if (e.target.classList.contains('modal-button')) {
+      showLoader();
+      const imdbid = e.target.dataset.imdbid;
+      fetch('http://www.omdbapi.com/?apikey=938a560a&i=' + imdbid)
+        .then(response => response.json())
+        .then(response => {
+          const modal = document.querySelector('.example-modal');
+          modal.innerHTML = detailCards(response);
+    
+          const detail = document.querySelector('.modal-container');
+    
+          setTimeout(() => {
+          modal.classList.add('scale-100');
+          detail.classList.add('opacity-100', 'scale-80');
+          }, 200);
+        }).finally(() => {hideLoader()});
+    }
+
+
+    const pageDetail = document.querySelector('.example-modal');
+    pageDetail.addEventListener('click', e => {
+      if (e.target.classList.contains('close-btn') || e.target.classList.contains('x-close')) {
+        const detail = document.querySelector('.modal-container');
+        const modal = document.querySelector('.example-modal');
+        detail.classList.remove('opacity-100', 'scale-80');
+        setTimeout(() => {
+          modal.classList.remove('scale-100');
+          }, 300);
+      }
     });
-});
+
+  });
 
 function showCards(m){
   return `      
@@ -123,9 +126,9 @@ function showCards(m){
 
 
 function detailCards(m) {
-  return `<div class="w-full max-w-xs mx-auto transition-all duration-200 ease-in-out scale-0 rounded-md shadow-md opacity-0 bg-slate-200 md:max-w-3xl modal-container">
+  return `<div class="w-full max-w-xs mx-auto transition-all duration-200 ease-in-out scale-0 rounded-md shadow-md opacity-0 bg-white/20 backdrop-blur-2xl md:max-w-3xl modal-container">
               <div class="px-3 py-3 border-b border-slate-400">
-                <h1 class="flex items-center justify-between font-semibold">Detail <span class="text-2xl font-semibold cursor-pointer x-close ">×</span></h>
+                <h1 class="flex text-slate-300 items-center justify-between font-semibold">Detail <span class="text-2xl font-semibold cursor-pointer x-close ">×</span></h>
               </div>
       
               <div class="flex flex-wrap justify-center pt-5">
@@ -133,11 +136,11 @@ function detailCards(m) {
                   <img src="${m.Poster}" alt="" class="">
                 </div>
                 <div class="px-2 py-3 text-sm md:text-lg md:w-2/3">
-                  <h1 class="py-3 text-2xl font-semibold border-b border-slate-400">${m.Title}</h1>
-                  <p class="py-2 border-b border-slate-400"><span class="font-semibold">Director: </span>${m.Director}</p>
-                  <p class="py-2 border-b border-slate-400"><span class="font-semibold">Actors: </span>${m.Actors}</p>
-                  <p class="py-2 border-b border-slate-400"><span class="font-semibold">Writer: </span>${m.Writer}</p>
-                  <p class="py-2 "><span class="font-semibold">Plot:</span><br>${m.Plot}</p>
+                  <h1 class="py-3 text-2xl font-semibold border-b border-slate-400 text-slate-300">${m.Title}</h1>
+                  <p class="py-2 border-b border-slate-400 text-slate-300"><span class="font-semibold">Director: </span>${m.Director}</p>
+                  <p class="py-2 border-b border-slate-400 text-slate-300"><span class="font-semibold">Actors: </span>${m.Actors}</p>
+                  <p class="py-2 border-b border-slate-400 text-slate-300"><span class="font-semibold">Writer: </span>${m.Writer}</p>
+                  <p class="py-2 text-slate-300"><span class="font-semibold">Plot:</span><br>${m.Plot}</p>
                 </div>
       
               </div>
@@ -145,4 +148,15 @@ function detailCards(m) {
                 <button class="px-3 py-1 bg-red-400 rounded-md cursor-pointer close-btn">Close</button>
               </div>
             </div>`;
+}
+
+
+// animasi loader
+const load = document.querySelector('.loader');
+function showLoader() {
+  load.classList.remove('d-none');
+}
+
+function hideLoader() {
+  load.classList.add('d-none');
 }
