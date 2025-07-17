@@ -8,7 +8,7 @@ form.addEventListener('submit', async function(e) {
     console.log(movies)
     updateUI(movies);
   } catch (error) {
-    console.error(error);
+    alert(error);
   } finally {
     hideLoader();
   }
@@ -25,7 +25,7 @@ modalButton.addEventListener('click', async e => {
       const detail = await getMovieDetail(imdbid);
       getUiDetail(detail);
     } catch (error) {
-      console.error(error);
+      alert(error);
     } finally {
       hideLoader();
     }
@@ -37,9 +37,18 @@ modalButton.addEventListener('click', async e => {
 // fungsi untuk ambil API
 function getMovies(movies){
   return fetch('http://www.omdbapi.com/?apikey=938a560a&s=' + movies)
-  .then(response => response.json())
-  .then(response => response.Search)
-  .catch(error => {console.log(error)});
+  .then(response => {
+    if (!response.ok) {
+      throw new Error(response.status);
+    }
+    return response.json();
+  })
+  .then(response => {
+    if ( response.Response === "False" ) {
+      throw new Error(response.Error);
+    }
+    return response.Search;
+  });
 }
 
 // fungsi untuk menampilkan UI
@@ -53,8 +62,18 @@ function updateUI(ui) {
 // fungsi untuk ambil API detail movie
 function getMovieDetail(imdbid) {
   return fetch('http://www.omdbapi.com/?apikey=938a560a&i=' + imdbid)
-  .then(response => response.json())
-  .then(response => response); 
+  .then(response => {
+    if ( !response.ok ) {
+      throw new Error(response.status);
+    }
+    return response.json();
+  })
+  .then(response => {
+    if ( response.Response === "False" ) {
+      throw new Error(response.Error);
+    }
+    return response;
+  }); 
 }
 
 // fungsi untuk menampilkan UI movie detail
